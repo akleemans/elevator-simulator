@@ -5,6 +5,8 @@ let canvas: any;
 let ctx: any;
 let tick: number;
 
+const floors: number = 6;
+
 // defined by user
 let onCall: any;
 let onEmpty: any;
@@ -26,10 +28,6 @@ function setup() {
     // add elevators
     this.elevators.push(new Elevator(0));
     this.elevators.push(new Elevator(1));
-
-    // some initial positions / movement
-    //this.elevators[0].moveTo(3);
-    //this.elevators[1].setPosition(2);
 
     this.queue = new Array<Group>();
 
@@ -53,13 +51,12 @@ function setup() {
 
 /* -------- main loop -------- */
 
-function main(x) {
+function main(x: number) {
     if (onCall === undefined) {
         console.log("onCall() undefined!");
     }
 
     window.requestAnimationFrame(main);
-    //console.log('Im in yr loop...', x);
     update();
     render();
     tick += 1;
@@ -108,19 +105,36 @@ function render() {
     // clear canvas
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
+    // draw floors
+    drawBackground();
+
+    // draw elevators
     for (let i = 0; i < elevators.length; i++) {
         drawElevator(elevators[i]);
-        // TODO draw_elevator(elevators.get(i))
     }
 }
 
 function drawElevator(elevator: Elevator) {
     //console.log("Drawing elevator:", elevator);
     let x = 50 + 100 * elevator.id;
-    let y = 300 - elevator.position/2;
+    let y = 300 - elevator.position / 2;
     this.ctx.beginPath();
     this.ctx.rect(x, y, 30, 50);
     this.ctx.stroke();
+}
+
+function drawBackground() {
+    ctx.font = "20px Arial";
+
+    for (let floor = 0; floor < floors; floor++) {
+        let y = 300 - (floor - 1) * 50;
+        ctx.beginPath();
+        ctx.moveTo(20, y);
+        ctx.lineTo(300, y);
+        ctx.stroke();
+
+        ctx.fillText(floor, 10, y);
+    }
 }
 
 /* -------- functions -------- */
@@ -139,12 +153,12 @@ function getRandomInt(min: number, max: number): number {
 
 /* -------- classes -------- */
 
-
 class Elevator {
     id: number;
     position: number;
     moving: boolean;
     currentGoal: number;
+    destinations: Array<number>;
     velocity: number;
     capacity: number;
     groups: Array<Group>;
@@ -167,7 +181,7 @@ class Elevator {
 
     enter(group: Group): boolean {
         // TODO maybe check capacity
-        console.log("Group " + group.id +" is entering elevator " + this.id);
+        console.log("Group " + group.id + " is entering elevator " + this.id);
         this.groups.push(group);
         group.setStatus(GroupStatus.Elevating);
         return true;
@@ -215,11 +229,11 @@ class Elevator {
     }
 
     setFloor(floor: number) {
-        this.position = floor*100;
+        this.position = floor * 100;
     }
 
     getFloor(): number {
-        return this.position/100;
+        return this.position / 100;
     }
 }
 
@@ -269,11 +283,11 @@ function run() {
     document.body.appendChild(newScript);
 
     // start game loop
-    main();
+    main(0);
 }
 
 /* -------- setup -------- */
 
-document.addEventListener("DOMContentLoaded", function(event) {
+document.addEventListener("DOMContentLoaded", function (event) {
     setup();
 });

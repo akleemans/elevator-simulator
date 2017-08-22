@@ -4,6 +4,7 @@ var queue;
 var canvas;
 var ctx;
 var tick;
+var floors = 6;
 // defined by user
 var onCall;
 var onEmpty;
@@ -23,9 +24,6 @@ function setup() {
     // add elevators
     this.elevators.push(new Elevator(0));
     this.elevators.push(new Elevator(1));
-    // some initial positions / movement
-    //this.elevators[0].moveTo(3);
-    //this.elevators[1].setPosition(2);
     this.queue = new Array();
     for (var i = 0; i < 10; i++) {
         var from = getRandomInt(0, 6);
@@ -47,7 +45,6 @@ function main(x) {
         console.log("onCall() undefined!");
     }
     window.requestAnimationFrame(main);
-    //console.log('Im in yr loop...', x);
     update();
     render();
     tick += 1;
@@ -89,9 +86,11 @@ function update() {
 function render() {
     // clear canvas
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    // draw floors
+    drawBackground();
+    // draw elevators
     for (var i = 0; i < elevators.length; i++) {
         drawElevator(elevators[i]);
-        // TODO draw_elevator(elevators.get(i))
     }
 }
 function drawElevator(elevator) {
@@ -101,6 +100,17 @@ function drawElevator(elevator) {
     this.ctx.beginPath();
     this.ctx.rect(x, y, 30, 50);
     this.ctx.stroke();
+}
+function drawBackground() {
+    ctx.font = "20px Arial";
+    for (var floor = 0; floor < floors; floor++) {
+        var y = 300 - (floor - 1) * 50;
+        ctx.beginPath();
+        ctx.moveTo(20, y);
+        ctx.lineTo(300, y);
+        ctx.stroke();
+        ctx.fillText(floor, 10, y);
+    }
 }
 /* -------- functions -------- */
 function log(s) {
@@ -212,7 +222,7 @@ function run() {
     newScript.text = el.value;
     document.body.appendChild(newScript);
     // start game loop
-    main();
+    main(0);
 }
 /* -------- setup -------- */
 document.addEventListener("DOMContentLoaded", function (event) {
