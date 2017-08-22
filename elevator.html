@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Elevator</title>
+    <script type="text/javascript" src="elevator.js"></script>
+</head>
+<body>
+<h1></h1>
+
+<div id="parent">
+    <div id="narrow">
+        <canvas id="drawCanvas" width="400" height="400"></canvas>
+    </div>
+    <div id="wide">
+      <textarea id="code" rows="20" cols="80">var e0 = elevators[0];
+var e1 = elevators[1];
+
+// simple implementation of moving elevators
+function onCall(size, from, to) {
+    if (!e0.isBusy()) {
+	e0.moveTo(to);
+    } else {
+	e1.moveTo(to);
+    }
+}
+    
+function onEmpty(elevator) {
+    // return to base level
+    elevator.moveTo(0);
+}
+    </textarea>
+        <br>
+        <button onClick="run()">run</button>
+    </div>
+</div>
+<div id="log"></div>
+
+<style>
+    #parent {
+        display: flex;
+    }
+
+    #narrow {
+        width: 600px;
+        /*background: lightblue;*/
+    }
+
+    #wide {
+        flex: 1;
+        /* Grow to rest of container */
+        /*background: lightgreen;*/
+    }
+</style>
+</body>
+</html>
