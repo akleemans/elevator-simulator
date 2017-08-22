@@ -13,15 +13,18 @@
         <canvas id="drawCanvas" width="400" height="400"></canvas>
     </div>
     <div id="wide">
-      <textarea id="code" rows="20" cols="80">var e0 = elevators[0];
+        <button onClick="example1()">Example 1</button>
+        <button onClick="example2()">Example 2</button>
+        <br>
+        <textarea id="code" rows="20" cols="80">var e0 = elevators[0];
 var e1 = elevators[1];
 
 // simple implementation of moving elevators
 function onCall(size, from, to) {
     if (!e0.isBusy()) {
-	e0.moveTo(to);
+	    e0.moveTo(from);
     } else {
-	e1.moveTo(to);
+	    e1.moveTo(from);
     }
 }
     
@@ -29,7 +32,7 @@ function onEmpty(elevator) {
     // return to base level
     elevator.moveTo(0);
 }
-    </textarea>
+        </textarea>
         <br>
         <button onClick="run()">run</button>
     </div>
